@@ -3,6 +3,7 @@ from pymongo import MongoClient
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
+import re
 
 # def standardize_data(row):
 #     row = re.sub(r"[\.,\?]+$-", "", row)
@@ -31,13 +32,13 @@ def get_recommendations(id):
     return data['title'].iloc[movie_indices]
 
 data = pd.read_csv("data_test.csv")
-
+id = '62b6c83b023830051e30e449'
 data['bodyFull'] = data['bodyFull'].fillna('')
 tfidf = TfidfVectorizer(stop_words='english')
 tfidf_matrix = tfidf.fit_transform(data['bodyFull'])
 cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
 
 indices = pd.Series(data.index, index=data['_id']).drop_duplicates()
-print(get_recommendations('62b6c83b023830051e30e449'))
-print(data[data['_id'] == '62b6c83b023830051e30e449']['title'])
+print(get_recommendations(id))
+print(data[data['_id'] == id]['title'])
 
